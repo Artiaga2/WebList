@@ -26,6 +26,10 @@ if(!empty($_POST)){
         $errors['name']['required'] = "El campo nombre es requerido";
     }
 
+//    if ($_POST['name'] === $pro['name']){
+//        $errors['name']['required'] = "El producto ya esta añadido";
+//    }
+
     if( $productos['quantity'] == "" ){
         $errors['quantity']['required'] = "El campo cantidad es requerido";
     }
@@ -48,27 +52,48 @@ if(!empty($_POST)){
 
 
     if (empty($errors)){
-        // Si no tengo errores de validación
-        // Guardo en la BD
-        $sql = "INSERT INTO productos (name, quantity, price, description, brand, type) VALUES (:name, :quantity, :price, :description, :brand, :type)";
 
-        $result = $pdo->prepare($sql);
-
-        $result->execute([
-            'name'          => $productos['name'],
-            'quantity'      => $productos['quantity'],
-            'price'         => $productos['price'],
-            'description'   => $productos['description'],
-            'brand'         => $productos['brand'],
-            'type'          => $productos['type']
+        $tabla = array();
+        $tabla = "SELECT name FROM productos";
+        $resultado = $pdo->prepare($tabla);
+        $resultado->execute([
+                'name' => $productos['name']
         ]);
 
+        for ($i = 0; $i = array_walk($tabla); $i++  ){
+
+            if ($tabla = $productos['name']){
+                $errors['name']['required'] = "El campo nombre ya  esta en uso";
+            }
+        }
+    };
+
+
+//        if ($productos['name'] != $tabla) {
+            // Si no tengo errores de validación
+            // Guardo en la BD
+            $sql = "INSERT INTO productos (name, quantity, price, description, brand, type) VALUES (:name, :quantity, :price, :description, :brand, :type)";
+
+            $result = $pdo->prepare($sql);
+
+            $result->execute([
+                'name'          => $productos['name'],
+                'quantity'      => $productos['quantity'],
+                'price'         => $productos['price'],
+                'description'   => $productos['description'],
+                'brand'         => $productos['brand'],
+                'type'          => $productos['type']
+            ]);
+
+
+//        }else{
+//            $error = true;
+//        }
         // Si se guarda sin problemas se redirecciona la aplicación a la página de inicio
         header('Location: index.php');
     }else{
         // Si tengo errores de validación
         $error = true;
-    }
 }
 
 $error = !empty($errors)?true:false;
@@ -137,7 +162,7 @@ $error = !empty($errors)?true:false;
             <input type="text" class="form-control" id="inputType" name="type" placeholder="type" value="<?=$productos['type']?>">
         </div>
 
-        <?=generarAlert($errors, 'description')?>
+        <?=generarAlert($errors, 'name')?>
         <button type="submit" class="btn btn-default">Submit</button>
     </form>
 </div><!-- /.container -->

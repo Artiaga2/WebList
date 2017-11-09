@@ -60,7 +60,7 @@ if(!empty($_POST)){
     if (empty($errors)){
         // Si no tengo errores de validación
         // Guardo en la BD
-        $sql = "UPDATE productos SET name = :name, quantity = :quantity, price = :price, description = :description, brand = :brand, type = :type";
+        $sql = "UPDATE productos SET name = :name, quantity = :quantity, price = :price, description = :description, brand = :brand, type = :type WHERE id = :id";
 
         $result = $pdo->prepare($sql);
 
@@ -70,7 +70,8 @@ if(!empty($_POST)){
             'price'         => $productos['price'],
             'description'   => $productos['description'],
             'brand'         => $productos['brand'],
-            'type'          => $productos['type']
+            'type'          => $productos['type'],
+            'id'            => $id
         ]);
 
         // Si se guarda sin problemas se redirecciona la aplicación a la página de inicio
