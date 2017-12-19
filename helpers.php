@@ -6,33 +6,31 @@ function dameDato($dato){
     echo '</pre>';
     die();
 }
-/**
- * Esta función genera un bloque de alerta para mostrar cuando se producen errores de validación.
- *
- * @param $errors       Array con la información de los errores
- * @param $field        String con el nombre del campo a evaluar
- * @return null|string  Código HTML del error
- */
-function generarAlert($errors, $field){
-    // Si hay errores en ese campo:
-    if( isset($errors[$field]) ){
-        // Se crea un string con la lista de errores
-        $errorList = '';
-        foreach ($errors[$field] as $error) {
-            $errorList .= "{$error}<br>";
-        }
-
-        // Y se inserta dicha lista en un bloque alert (ver documentación bootstrap 3.3.7)
-        $alert = <<<ALERT
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <strong>{$errorList}</strong>
-                </div>
-ALERT;
-    }else{
-        $alert = null;
+function getRealIP()
+{
+    if (isset($_SERVER["HTTP_CLIENT_IP"]))
+    {
+        return $_SERVER["HTTP_CLIENT_IP"];
     }
-
-    return $alert;
+    elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+    {
+        return $_SERVER["HTTP_X_FORWARDED_FOR"];
+    }
+    elseif (isset($_SERVER["HTTP_X_FORWARDED"]))
+    {
+        return $_SERVER["HTTP_X_FORWARDED"];
+    }
+    elseif (isset($_SERVER["HTTP_FORWARDED_FOR"]))
+    {
+        return $_SERVER["HTTP_FORWARDED_FOR"];
+    }
+    elseif (isset($_SERVER["HTTP_FORWARDED"]))
+    {
+        return $_SERVER["HTTP_FORWARDED"];
+    }
+    else
+    {
+        return $_SERVER["REMOTE_ADDR"];
+    }
 }
 ?>
